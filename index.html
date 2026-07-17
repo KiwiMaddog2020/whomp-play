@@ -4,12 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>WHOMP</title>
+  <!-- PWA shell (relative hrefs on purpose: vite base './' → works at the
+       GH Pages subpath /whomp-play/ AND on the :5199 dev root) -->
+  <meta name="theme-color" content="#06040e">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="WHOMP">
   <style>
     html, body { margin: 0; height: 100%; background: #0d0b09; overflow: hidden; }
     #app { width: 100vw; height: 100vh; }
     #app canvas { display: block; }
   </style>
-  <script type="module" crossorigin src="./assets/index-CM4OBGyF.js"></script>
+  <script type="module" crossorigin src="./assets/index-8Tjofcft.js"></script>
 </head>
 <body>
   <div id="app"></div>
