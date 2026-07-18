@@ -1,7 +1,7 @@
 /* WHOMP service worker — app-shell precache + runtime caching.
  *
  * VERSION is stamped per deploy by bin/deploy-play.sh (sed on the
- * 0.3.0-bef740f placeholder in dist/sw.js). The stamp is what makes a
+ * 0.3.0-b8b8ba8 placeholder in dist/sw.js). The stamp is what makes a
  * new deploy's sw.js byte-different, which is what makes the browser install
  * a NEW worker; that worker deliberately parks in `waiting` (NO skipWaiting
  * on install) until the page's 'UPDATE READY — RESTART' toast posts
@@ -19,7 +19,7 @@
  *  - activate: drop every whomp-* cache that isn't this version's.
  */
 
-const VERSION = '0.3.0-bef740f';
+const VERSION = '0.3.0-b8b8ba8';
 const CACHE = `whomp-${VERSION}`;
 const SHELL = ['./', './index.html', './manifest.webmanifest'];
 
@@ -56,38 +56,45 @@ self.addEventListener('fetch', (event) => {
   // Vite content-hashed build output — immutable, cache-first.
   if (url.pathname.includes('/assets/')) {
     event.respondWith(
-      caches.match(req).then(
-        (hit) =>
-          hit ||
-          fetch(req).then((res) => {
-            if (res.ok) {
-              const copy = res.clone();
-              caches.open(CACHE).then((cache) => cache.put(req, copy));
-            }
-            return res;
-          }),
-      ),
+      (async () => {
+        const hit = await caches.match(req);
+        if (hit) return hit;
+        const res = await fetch(req);
+        if (res.ok) {
+          try {
+            const cache = await caches.open(CACHE);
+            await cache.put(req, res.clone());
+          } catch {
+            // A cache quota/permission failure must not hide a valid response.
+          }
+        }
+        return res;
+      })(),
     );
     return;
   }
 
   // Shell + version.json + audio + icons — network-first, cache fallback.
   event.respondWith(
-    fetch(req)
-      .then((res) => {
+    (async () => {
+      try {
+        const res = await fetch(req);
         if (res.ok) {
-          const copy = res.clone();
-          caches.open(CACHE).then((cache) => cache.put(req, copy));
+          try {
+            const cache = await caches.open(CACHE);
+            await cache.put(req, res.clone());
+          } catch {
+            // A cache quota/permission failure must not hide a valid response.
+          }
         }
         return res;
-      })
-      .catch(() =>
-        caches.match(req).then((hit) => {
-          if (hit) return hit;
-          // Offline navigation to a path we never cached → serve the shell.
-          if (req.mode === 'navigate') return caches.match('./index.html');
-          return Response.error();
-        }),
-      ),
+      } catch {
+        const hit = await caches.match(req);
+        if (hit) return hit;
+        // Offline navigation to a path we never cached → serve the shell.
+        if (req.mode === 'navigate') return caches.match('./index.html');
+        return Response.error();
+      }
+    })(),
   );
 });
