@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WHOMP Specialist Roster 95</title>
+<style>
+  :root { color-scheme: dark; font-family: Inter, ui-rounded, "SF Pro Rounded", system-ui, sans-serif; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; min-height:100%; background:#070a14; }
+  body { overflow:hidden; }
+  header {
+    position:fixed; inset:0 0 auto; z-index:10; min-height:104px;
+    display:grid; grid-template-columns:minmax(300px,1fr) auto auto; align-items:center; gap:18px;
+    padding:14px 22px; border-bottom:1px solid rgba(116,231,255,.16);
+    background:linear-gradient(180deg,rgba(7,10,20,.99),rgba(7,10,20,.91)); backdrop-filter:blur(18px);
+  }
+  .eyebrow { color:#65e9ff; font-size:10px; font-weight:950; letter-spacing:.2em; text-transform:uppercase; }
+  h1 { margin:3px 0 0; font-size:clamp(19px,2vw,27px); letter-spacing:-.035em; }
+  .sub { max-width:630px; margin-top:4px; color:#8490aa; font-size:11px; line-height:1.4; }
+  .controls { display:flex; gap:5px; padding:5px; border:1px solid rgba(255,255,255,.1); border-radius:14px; background:rgba(255,255,255,.035); }
+  button { min-width:66px; padding:9px 10px; border:0; border-radius:9px; color:#909bb4; background:transparent; font:inherit; font-size:10px; font-weight:900; letter-spacing:.07em; cursor:pointer; }
+  button:hover { color:#fff; background:rgba(255,255,255,.065); }
+  button:focus-visible { outline:2px solid #91ffbd; outline-offset:2px; }
+  button.active { color:#05131a; background:linear-gradient(135deg,#5cecff,#91ffbd); box-shadow:0 5px 22px rgba(71,226,255,.22); }
+  main { position:fixed; inset:104px 0 0; display:grid; grid-template-columns:repeat(4,1fr); gap:2px; background:#252b40; }
+  article { position:relative; min-width:0; overflow:hidden; background:radial-gradient(circle at 50% 35%,#2a3859,#101526 68%); }
+  article::after { content:""; position:absolute; inset:0; pointer-events:none; box-shadow:inset 0 0 70px rgba(0,0,0,.24); }
+  canvas { display:block; width:100%; height:100%; }
+  .label { position:absolute; z-index:2; inset:15px 15px auto; pointer-events:none; }
+  .labelRow { display:flex; align-items:center; gap:8px; }
+  .index { display:grid; place-items:center; width:28px; height:28px; border:1px solid rgba(255,255,255,.25); border-radius:8px; color:#08111b; background:#f3f7ff; font-size:10px; font-weight:950; }
+  .name { color:#f5f7ff; font-size:14px; font-weight:950; letter-spacing:-.01em; }
+  .role { display:block; margin-top:1px; color:#74e6ff; font-size:10px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+  .label p { max-width:250px; margin:8px 0 0 36px; color:#9aa5bc; font-size:11px; line-height:1.48; }
+  .pills { position:absolute; z-index:2; inset:auto 14px 14px; display:flex; gap:5px; flex-wrap:wrap; pointer-events:none; }
+  .pill { padding:6px 7px; border:1px solid rgba(255,255,255,.1); border-radius:8px; color:#bdc7da; background:rgba(4,7,16,.62); backdrop-filter:blur(8px); font-size:10px; font-weight:850; letter-spacing:.045em; }
+  .pill.good { color:#74efbd; border-color:rgba(79,239,179,.25); }
+  @media (max-width:1120px) {
+    body { overflow:auto; }
+    header { position:sticky; grid-template-columns:1fr; gap:8px; }
+    main { position:relative; inset:auto; grid-template-columns:1fr 1fr; grid-template-rows:repeat(2,72vh); min-height:144vh; }
+  }
+  @media (max-width:620px) {
+    header { padding:12px; }
+    .controls { width:100%; display:grid; }
+    .controls button { min-width:0; padding-inline:5px; }
+    .controls[aria-label="Animation preview"] { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .controls[aria-label="Camera preview"] { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    main { grid-template-columns:1fr; grid-template-rows:repeat(4,72vh); }
+  }
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js"}}</script>
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">Original-model checkpoint · no donor bodies</div>
+    <h1>Specialist Roster 95</h1>
+    <div class="sub">Four distinct anatomies designed for WHOMP's elevated rear camera. Inspect every silhouette before production integration.</div>
+  </div>
+  <nav class="controls" aria-label="Animation preview">
+    <button class="active" data-mode="idle" aria-pressed="true">IDLE</button><button data-mode="walk" aria-pressed="false">WALK</button><button data-mode="ability" aria-pressed="false">ABILITY</button>
+  </nav>
+  <nav class="controls" aria-label="Camera preview">
+    <button data-view="front" aria-pressed="false">FRONT</button><button data-view="profile" aria-pressed="false">PROFILE</button><button data-view="rear" aria-pressed="false">REAR</button><button class="active" data-view="gameplay" aria-pressed="true">GAMEPLAY</button>
+  </nav>
+</header>
+<main>
+  <article id="sentinel"><div class="label"><div class="labelRow"><span class="index">01</span><span><span class="name">Sentinel</span><span class="role">Aegis automaton</span></span></div><p>Compact planted guardian with an integrated forearm shield, offset collar and shield-first stance.</p></div><div class="pills"><span class="pill good">DEDICATED BODY</span><span class="pill">ASYMMETRIC READ</span></div></article>
+  <article id="berserker"><div class="label"><div class="labelRow"><span class="index">02</span><span><span class="name">Berserker</span><span class="role">Ram bruiser</span></span></div><p>A forward-wedge brawler with a low protected head, massive forearms and a charge-ready gait.</p></div><div class="pills"><span class="pill good">DEDICATED BODY</span><span class="pill">POWER SILHOUETTE</span></div></article>
+  <article id="puppeteer"><div class="label"><div class="labelRow"><span class="index">03</span><span><span class="name">Puppeteer</span><span class="role">Porcelain ringmaster</span></span></div><p>Tall tapered performer with a mask face, spool frame, long hands and delayed marionette follow-through.</p></div><div class="pills"><span class="pill good">DEDICATED BODY</span><span class="pill">FOLLOW-THROUGH</span></div></article>
+  <article id="medic"><div class="label"><div class="labelRow"><span class="index">04</span><span><span class="name">Medic</span><span class="role">Rescue specialist</span></span></div><p>Friendly compact rescue robot with a teardrop shell, asymmetrical aid pack and brisk grounded boots.</p></div><div class="pills"><span class="pill good">DEDICATED BODY</span><span class="pill">SUPPORT READ</span></div></article>
+</main>
+<script type="module">
+import { applyView, resizeStage, setupStage } from './specialists/common.js';
+import { buildSentinelPrototype } from './specialists/sentinel.js';
+import { buildBerserkerPrototype } from './specialists/berserker.js';
+import { buildPuppeteerPrototype } from './specialists/puppeteer.js';
+import { buildMedicPrototype } from './specialists/medic.js';
+
+const definitions = [
+  ['sentinel', 0x58dfff, buildSentinelPrototype],
+  ['berserker', 0xff4f6f, buildBerserkerPrototype],
+  ['puppeteer', 0xc987ff, buildPuppeteerPrototype],
+  ['medic', 0x55f2b1, buildMedicPrototype],
+];
+const cells = definitions.map(([id, accent, build]) => {
+  const stage = setupStage(document.getElementById(id), accent);
+  const avatar = build();
+  stage.scene.add(avatar.root);
+  applyView(stage.camera, 'gameplay');
+  return { ...stage, avatar, visible: true };
+});
+
+if ('IntersectionObserver' in window) {
+  const cellByHost = new Map(cells.map((cell) => [cell.host, cell]));
+  const visibilityObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) cellByHost.get(entry.target).visible = entry.isIntersecting;
+  }, { rootMargin: '120px 0px' });
+  for (const cell of cells) visibilityObserver.observe(cell.host);
+}
+
+let mode = 'idle';
+let view = 'gameplay';
+let modeStartedAt = performance.now() * 0.001;
+function selectButtons(selector, selected) {
+  document.querySelectorAll(selector).forEach((entry) => {
+    const active = (entry.dataset.mode ?? entry.dataset.view) === selected;
+    entry.classList.toggle('active', active);
+    entry.setAttribute('aria-pressed', String(active));
+  });
+}
+document.querySelectorAll('[data-mode]').forEach((button) => button.addEventListener('click', () => {
+  mode = button.dataset.mode;
+  modeStartedAt = performance.now() * 0.001;
+  selectButtons('[data-mode]', mode);
+}));
+document.querySelectorAll('[data-view]').forEach((button) => button.addEventListener('click', () => {
+  view = button.dataset.view;
+  selectButtons('[data-view]', view);
+  cells.forEach((cell) => applyView(cell.camera, view));
+}));
+
+function frame(now) {
+  const time = now * 0.001;
+  const modeTime = Math.max(0, time - modeStartedAt);
+  for (const cell of cells) {
+    if (!cell.visible) continue;
+    resizeStage(cell);
+    cell.avatar.animate(modeTime, mode);
+    cell.renderer.render(cell.scene, cell.camera);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
