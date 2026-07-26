@@ -1,7 +1,7 @@
 /* WHOMP service worker — app-shell precache + runtime caching.
  *
  * VERSION is stamped per deploy by bin/deploy-play.sh (sed on the
- * 0.5.0-669b884 placeholder in dist/sw.js). The stamp is what makes a
+ * 0.5.0-6a2a856 placeholder in dist/sw.js). The stamp is what makes a
  * new deploy's sw.js byte-different, which is what makes the browser install
  * a NEW worker; that worker deliberately parks in `waiting` (NO skipWaiting
  * on install) until the page's 'UPDATE READY — RESTART' toast posts
@@ -19,7 +19,7 @@
  *  - activate: drop every whomp-* cache that isn't this version's.
  */
 
-const VERSION = '0.5.0-669b884';
+const VERSION = '0.5.0-6a2a856';
 const CACHE = `whomp-${VERSION}`;
 const SHELL = ['./', './index.html', './manifest.webmanifest'];
 
