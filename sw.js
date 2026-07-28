@@ -1,7 +1,7 @@
 /* WHOMP service worker — app-shell precache + runtime caching.
  *
  * VERSION is stamped per deploy by bin/deploy-play.sh (sed on the
- * 0.5.0-618bfbb placeholder in dist/sw.js). The stamp is what makes a
+ * 0.5.0-58eca06 placeholder in dist/sw.js). The stamp is what makes a
  * new deploy's sw.js byte-different, which is what makes the browser install
  * a NEW worker; that worker deliberately parks in `waiting` (NO skipWaiting
  * on install) until the page's 'UPDATE READY — RESTART' toast posts
@@ -13,13 +13,14 @@
  *  - install: precache the app shell (./, index.html, manifest).
  *  - fetch, same-origin GET only:
  *      · assets/ (Vite content-hashed, immutable) → cache-first;
- *      · everything else (index.html, version.json, manifest, audio, icons)
+ *      · version.json → network-only/no-store (the in-session update signal);
+ *      · everything else (index.html, manifest, audio, icons)
  *        → network-first with cache fallback, so navigations always try for
  *        the newest deploy but the installed app still boots offline.
  *  - activate: drop every whomp-* cache that isn't this version's.
  */
 
-const VERSION = '0.5.0-618bfbb';
+const VERSION = '0.5.0-58eca06';
 const CACHE = `whomp-${VERSION}`;
 const SHELL = ['./', './index.html', './manifest.webmanifest'];
 
@@ -74,7 +75,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Shell + version.json + audio + icons — network-first, cache fallback.
+  // Build identity probe for long-running tabs. Never cache it: stale
+  // version.json would hide the deploy that should trigger registration.update().
+  if (url.pathname.endsWith('/version.json')) {
+    event.respondWith(
+      fetch(new Request(req, { cache: 'no-store' })).catch(() => Response.error()),
+    );
+    return;
+  }
+
+  // Shell + audio + icons — network-first, cache fallback.
   event.respondWith(
     (async () => {
       try {
