@@ -1,0 +1,260 @@
+/* THE WHOMP LAB — hub-at-night, one step darker so text sits on it.
+ * Palette sampled from the game (src/hub/hub.ts HUB_PALETTE): bg 0x241a48,
+ * gem 0x2fe0ff, hemiSky 0x8f7fd6, player 0xffcf3f, ember seal 0xff7a3c. */
+
+:root {
+  --bg: #100b22;
+  --bg-2: #150f2c;
+  --bg-3: #1c1538;
+  --line: #2c2352;
+  --cyan: #2fe0ff;
+  --violet: #8f7fd6;
+  --amber: #ffcf3f;
+  --ember: #ff7a3c;
+  --text: #e9e4ff;
+  --dim: #9a92c4;
+  --mark: #ffb454;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif;
+  overflow: hidden;
+}
+
+kbd {
+  font: 600 10px/1 var(--mono);
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px;
+  padding: 2px 4px;
+  margin-right: 5px;
+  color: var(--dim);
+}
+
+code { font-family: var(--mono); color: var(--cyan); }
+
+/* ── PANE BAR ─────────────────────────────────────────────────────────────── */
+
+.pane-bar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+  padding: 0 12px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  font: 700 12px/1 var(--mono);
+  letter-spacing: 0.13em;
+  color: var(--cyan);
+  margin-right: 18px;
+  white-space: nowrap;
+}
+
+.pane-tab {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--dim);
+  font: 600 11px/1 var(--mono);
+  letter-spacing: 0.09em;
+  padding: 11px 12px 9px;
+  cursor: pointer;
+}
+
+.pane-tab:hover:not(:disabled) { color: var(--text); }
+.pane-tab.on { color: var(--cyan); border-bottom-color: var(--cyan); }
+.pane-tab.soon { opacity: 0.42; cursor: default; }
+
+.soon-tag {
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  margin-left: 5px;
+  padding: 1px 4px;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  vertical-align: 1px;
+}
+
+.bar-spacer { flex: 1; }
+.bar-note { font: 400 10px/1 var(--mono); color: var(--dim); }
+
+/* ── PANE ─────────────────────────────────────────────────────────────────── */
+
+.pane-host { height: calc(100% - 40px); }
+.pane-map { display: flex; height: 100%; }
+
+.map-stage { position: relative; flex: 1; min-width: 0; }
+.map-stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+.map-hud {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.hud-row { display: flex; flex-wrap: wrap; gap: 4px; pointer-events: auto; }
+.hud-sep { width: 10px; }
+
+.chip {
+  appearance: none;
+  background: rgba(21, 15, 44, 0.86);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--dim);
+  font: 500 11px/1 var(--mono);
+  padding: 5px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  backdrop-filter: blur(3px);
+}
+
+.chip:hover { color: var(--text); border-color: var(--violet); }
+.chip.on { color: var(--cyan); border-color: var(--cyan); background: rgba(47, 224, 255, 0.09); }
+.chip.send { color: var(--amber); border-color: rgba(255, 207, 63, 0.5); }
+.chip.send:hover { background: rgba(255, 207, 63, 0.12); }
+
+.map-scale {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  font: 400 10px/1 var(--mono);
+  color: var(--dim);
+  background: rgba(21, 15, 44, 0.8);
+  padding: 4px 7px;
+  border-radius: 4px;
+}
+
+/* ── SIDE PANEL ───────────────────────────────────────────────────────────── */
+
+.side {
+  width: 320px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-2);
+  border-left: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.side-block { padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.side-grow { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+.side h3 {
+  margin: 0 0 8px;
+  font: 600 10px/1 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.side h3 .count { color: var(--dim); margin-left: 6px; }
+.hint { margin: 0; color: var(--dim); font-size: 11.5px; }
+
+.kv {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin-bottom: 4px;
+  font: 400 11.5px/1.5 var(--mono);
+}
+
+.kv span { color: var(--dim); }
+.kv b { color: var(--text); font-weight: 600; }
+
+.meta {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1px 10px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  font: 400 11px/1.6 var(--mono);
+}
+
+.meta span { color: var(--dim); }
+.meta b { color: var(--text); font-weight: 500; overflow-wrap: anywhere; }
+
+textarea {
+  width: 100%;
+  margin-top: 8px;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--text);
+  font: 400 12px/1.45 var(--mono);
+  padding: 7px 8px;
+  resize: vertical;
+}
+
+textarea:focus { outline: none; border-color: var(--cyan); }
+
+.marklist { list-style: none; margin: 10px 0 0; padding: 0; max-height: 150px; overflow-y: auto; }
+
+.marklist li {
+  padding: 4px 6px;
+  border-radius: 4px;
+  font: 400 11px/1.4 var(--mono);
+  color: var(--dim);
+  cursor: pointer;
+}
+
+.marklist li:hover { background: rgba(255, 255, 255, 0.04); }
+.marklist li.on { background: rgba(47, 224, 255, 0.1); }
+.marklist li em { color: var(--cyan); font-style: normal; }
+.marklist li span { display: block; color: var(--text); }
+
+/* ── THE TAPE ─────────────────────────────────────────────────────────────── */
+
+.tape {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  font: 400 11px/1.5 var(--mono);
+}
+
+.tape li {
+  display: flex;
+  gap: 8px;
+  padding: 2px 0;
+  color: var(--dim);
+  overflow-wrap: anywhere;
+}
+
+.tape time { color: rgba(154, 146, 196, 0.55); flex: none; }
+.tape .t-mark { color: var(--mark); }
+.tape .t-note { color: var(--text); }
+.tape .t-select { color: var(--cyan); }
+.tape .t-send { color: var(--amber); }
+.tape .t-undo { color: var(--ember); }
+
+/* ── STATUS ───────────────────────────────────────────────────────────────── */
+
+.status { font: 400 11px/1.4 var(--mono); color: var(--dim); }
+.status.sending { color: var(--amber); }
+.status.sent { color: #7ee08a; }
+.status.error { color: var(--ember); }
+
+@media (max-width: 860px) {
+  .pane-map { flex-direction: column; }
+  .side { width: 100%; height: 45%; border-left: 0; border-top: 1px solid var(--line); }
+}

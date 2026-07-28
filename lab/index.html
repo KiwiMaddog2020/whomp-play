@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THE WHOMP LAB</title>
+<link rel="stylesheet" href="./lab.css">
+</head>
+<body>
+<!--
+  THE WHOMP LAB. A dev-facing tool, not a shipped surface.
+
+  Open it either way:
+    · double-click this file (file://)
+    · npx vite, then http://localhost:5199/lab/
+
+  CLASSIC SCRIPTS, NOT MODULE SCRIPTS, and that is deliberate. `type="module"`
+  and `fetch()` are both blocked from a file:// origin in every Chromium
+  browser, so a module-loaded lab would only ever open through a dev server.
+  Every file below is written with no import/export statements, which makes it
+  simultaneously a valid classic script (what this page loads) and a valid ES
+  module (what lab/selftest.mjs imports into node). No build step, no bundler,
+  no external dependency, one source of truth per file.
+
+  data/hubmap.js is GENERATED — see tests/hubMapExport.test.ts.
+-->
+<header id="pane-bar" class="pane-bar"></header>
+<main id="pane-host" class="pane-host"></main>
+<noscript><p class="hint" style="padding:2rem">THE WHOMP LAB needs JavaScript.</p></noscript>
+<script src="./data/hubmap.js"></script>
+<script src="./view.js"></script>
+<script src="./annotate.js"></script>
+<script src="./map.js"></script>
+<script src="./lab.js"></script>
+</body>
+</html>
