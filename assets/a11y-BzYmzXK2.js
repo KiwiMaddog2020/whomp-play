@@ -1,0 +1,1 @@
+function e(e,t,n){e?.setAttribute?.(t,n)}function t(e){if(!e)return;let t=e.ownerDocument;t&&t.activeElement===e||e.focus?.()}function n(e){return!!e.target?.closest?.(`input, textarea, [contenteditable="true"]`)}export{n,e as r,t};
