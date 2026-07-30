@@ -235,14 +235,14 @@ globalThis.__WHOMP_HUBMAP__ = {
       "layer": "portals",
       "kind": "portal",
       "label": "desert",
-      "x": 78,
+      "x": 84,
       "z": -24,
       "shape": "circle",
       "r": 2.7,
       "meta": {
         "district": "ember",
         "levelId": "desert",
-        "facing": -0.9273
+        "facing": -1.0075
       }
     },
     {
@@ -250,14 +250,14 @@ globalThis.__WHOMP_HUBMAP__ = {
       "layer": "portals",
       "kind": "portal",
       "label": "suncoastShallows",
-      "x": 78,
+      "x": 84,
       "z": -8,
       "shape": "circle",
       "r": 2.7,
       "meta": {
         "district": "ember",
         "levelId": "suncoastShallows",
-        "facing": -1.3258
+        "facing": -1.3633
       }
     },
     {
@@ -265,14 +265,14 @@ globalThis.__WHOMP_HUBMAP__ = {
       "layer": "portals",
       "kind": "portal",
       "label": "gildedCanyon",
-      "x": 78,
+      "x": 84,
       "z": 8,
       "shape": "circle",
       "r": 2.7,
       "meta": {
         "district": "ember",
         "levelId": "gildedCanyon",
-        "facing": -1.8158
+        "facing": -1.7783
       }
     },
     {
@@ -280,14 +280,14 @@ globalThis.__WHOMP_HUBMAP__ = {
       "layer": "portals",
       "kind": "portal",
       "label": "sunkenSteps",
-      "x": 78,
+      "x": 84,
       "z": 24,
       "shape": "circle",
       "r": 2.7,
       "meta": {
         "district": "ember",
         "levelId": "sunkenSteps",
-        "facing": -2.2143
+        "facing": -2.1341
       }
     },
     {
