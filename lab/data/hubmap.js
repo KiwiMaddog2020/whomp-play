@@ -26,9 +26,9 @@ globalThis.__WHOMP_HUBMAP__ = {
     "landmarks"
   ],
   "counts": {
-    "total": 132,
+    "total": 134,
     "districts": 9,
-    "portals": 12,
+    "portals": 14,
     "gates": 9,
     "village": 45,
     "paths": 16,
@@ -84,8 +84,8 @@ globalThis.__WHOMP_HUBMAP__ = {
       "meta": {
         "key": "frost",
         "gate": "frostGate",
-        "levels": "",
-        "levelCount": 0
+        "levels": "frostreachPines,shiverpeakSummit",
+        "levelCount": 2
       }
     },
     {
@@ -291,6 +291,36 @@ globalThis.__WHOMP_HUBMAP__ = {
       }
     },
     {
+      "id": "portal:frost:0",
+      "layer": "portals",
+      "kind": "portal",
+      "label": "frostreachPines",
+      "x": 83,
+      "z": -89,
+      "shape": "circle",
+      "r": 2.7,
+      "meta": {
+        "district": "frost",
+        "levelId": "frostreachPines",
+        "facing": -0.7294
+      }
+    },
+    {
+      "id": "portal:frost:1",
+      "layer": "portals",
+      "kind": "portal",
+      "label": "shiverpeakSummit",
+      "x": 89,
+      "z": -81,
+      "shape": "circle",
+      "r": 2.7,
+      "meta": {
+        "district": "frost",
+        "levelId": "shiverpeakSummit",
+        "facing": -0.8614
+      }
+    },
+    {
       "id": "portal:void:0",
       "layer": "portals",
       "kind": "portal",
@@ -450,7 +480,7 @@ globalThis.__WHOMP_HUBMAP__ = {
       "meta": {
         "opens": "void",
         "plaque": "CLEAR EVERY WORLD BEFORE THE VOID",
-        "requires": "desert,suncoastShallows,gildedCanyon"
+        "requires": "desert,suncoastShallows,gildedCanyon,frostreachPines,shiverpeakSummit"
       }
     },
     {
