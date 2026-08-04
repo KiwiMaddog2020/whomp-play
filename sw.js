@@ -1,7 +1,7 @@
 /* WHOMP service worker — app-shell precache + runtime caching.
  *
- * VERSION is stamped per deploy by bin/deploy-play.sh (sed on the
- * 0.6.0-3f18b7d0 placeholder in dist/sw.js). The stamp is what makes a
+ * CHANNEL and VERSION are stamped by vite.config.ts on the
+ * stable/0.6.1-0cb53bbe placeholders in dist/sw.js. The stamp makes a
  * new deploy's sw.js byte-different, which is what makes the browser install
  * a NEW worker; that worker deliberately parks in `waiting` (NO skipWaiting
  * on install) until the page's 'UPDATE READY — RESTART' toast posts
@@ -17,12 +17,23 @@
  *      · everything else (index.html, manifest, audio, icons)
  *        → network-first with cache fallback, so navigations always try for
  *        the newest deploy but the installed app still boots offline.
- *  - activate: drop every whomp-* cache that isn't this version's.
+ *  - activate: drop only this channel's older caches. Never touch another
+ *    channel namespace, even if a development shell hosts both on one origin.
  */
 
-const VERSION = '0.6.0-3f18b7d0';
-const CACHE = `whomp-${VERSION}`;
+const CHANNEL = 'stable';
+const VERSION = '0.6.1-0cb53bbe';
+const CACHE_PREFIX = `whomp-${CHANNEL}-`;
+const CACHE = `${CACHE_PREFIX}${VERSION}`;
 const SHELL = ['./', './index.html', './manifest.webmanifest'];
+
+async function openOwnCache() {
+  try {
+    return await caches.open(CACHE);
+  } catch {
+    return null;
+  }
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -37,7 +48,7 @@ self.addEventListener('activate', (event) => {
       .keys()
       .then((keys) =>
         Promise.all(
-          keys.filter((k) => k.startsWith('whomp-') && k !== CACHE).map((k) => caches.delete(k)),
+          keys.filter((k) => k.startsWith(CACHE_PREFIX) && k !== CACHE).map((k) => caches.delete(k)),
         ),
       )
       .then(() => self.clients.claim()),
@@ -58,13 +69,13 @@ self.addEventListener('fetch', (event) => {
   if (url.pathname.includes('/assets/')) {
     event.respondWith(
       (async () => {
-        const hit = await caches.match(req);
+        const cache = await openOwnCache();
+        const hit = cache ? await cache.match(req) : undefined;
         if (hit) return hit;
         const res = await fetch(req);
         if (res.ok) {
           try {
-            const cache = await caches.open(CACHE);
-            await cache.put(req, res.clone());
+            await cache?.put(req, res.clone());
           } catch {
             // A cache quota/permission failure must not hide a valid response.
           }
@@ -91,18 +102,22 @@ self.addEventListener('fetch', (event) => {
         const res = await fetch(req);
         if (res.ok) {
           try {
-            const cache = await caches.open(CACHE);
-            await cache.put(req, res.clone());
+            const cache = await openOwnCache();
+            await cache?.put(req, res.clone());
           } catch {
             // A cache quota/permission failure must not hide a valid response.
           }
         }
         return res;
       } catch {
-        const hit = await caches.match(req);
+        const cache = await openOwnCache();
+        const hit = cache ? await cache.match(req) : undefined;
         if (hit) return hit;
         // Offline navigation to a path we never cached → serve the shell.
-        if (req.mode === 'navigate') return caches.match('./index.html');
+        if (req.mode === 'navigate' && cache) {
+          const shell = await cache.match('./index.html');
+          if (shell) return shell;
+        }
         return Response.error();
       }
     })(),
