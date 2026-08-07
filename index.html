@@ -3,6 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- A dark UA canvas and dark UA controls. NOTE, because it was measured and
+       is easy to assume otherwise: this does NOT remove the white frame at the
+       very start of a navigation. That frame belongs to the PREVIOUS page,
+       which the browser holds until this one paints, and an A/B with and
+       without this line produced byte-identical frame captures. It is here
+       because the page is dark and should say so, not as a flash fix. -->
+  <meta name="color-scheme" content="dark">
   <title>WHOMP</title>
   <!-- PWA shell (relative hrefs on purpose: vite base './' → works at the
        GH Pages subpath /whomp-play/ AND on the :5199 dev root) -->
@@ -15,21 +22,59 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="WHOMP">
   <style>
-    html, body { margin: 0; height: 100%; background: #0d0b09; overflow: hidden; }
+    /* THIS FILE SHIPS VERBATIM on the critical path, so the reasoning behind
+       every rule below lives in src/ui/bootSplash.ts. The short version:
+       #06040e is the deep end of the title menu's own cosmos gradient, so this
+       is the game's colour and not a placeholder, and it is a FLAT fill because
+       a gradient here cost a measured 124ms of first paint.
+       tests/bootLoadingPolish.test.ts fails if it drifts from the menu's. */
+    :root { color-scheme: dark; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #06040e; }
     #app { width: 100vw; height: 100vh; user-select: none; -webkit-user-select: none; }
     #app canvas { display: block; }
+
+    /* THE BOOT SPLASH. `visibility:hidden` plus a stepped animation is what
+       keeps it off the first paint: it costs 348ms of first paint if it is
+       visible at frame one, and nothing at all if it arrives after. So the
+       first frame is the flat cosmos at ~130ms and the gradient, vignette and
+       sweep composite in behind it. */
+    #whomp-boot {
+      position: fixed; inset: 0; z-index: 960; pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at center, transparent 52%, rgba(4,2,10,0.62) 100%),
+                  radial-gradient(ellipse at center, rgba(30,14,42,0.98), rgba(6,4,14,1));
+      transition: opacity 260ms ease-out;
+      visibility: hidden; animation: whomp-boot-show 300ms steps(1, end) forwards;
+    }
+    #whomp-boot[data-out] { opacity: 0; }
+    /* The sweep waits 320ms more, so a warm boot that reaches the menu first
+       shows the cosmos and never a loading mark it did not need. */
+    #whomp-boot i {
+      display: block; width: min(38vw, 260px); height: 3px; border-radius: 2px; opacity: 0;
+      background: linear-gradient(90deg, transparent, #ff2f7e, #24f0ff, transparent);
+      filter: drop-shadow(0 0 9px #24f0ff);
+      animation: whomp-boot-sweep 1600ms ease-in-out 320ms infinite;
+    }
+    @keyframes whomp-boot-show { to { visibility: visible; } }
+    @keyframes whomp-boot-sweep {
+      0%, 100% { opacity: 0.25; transform: scaleX(0.72); }
+      50%      { opacity: 1;    transform: scaleX(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #whomp-boot i { animation: whomp-boot-fade 420ms ease-out 320ms forwards; }
+      @keyframes whomp-boot-fade { to { opacity: 0.7; } }
+    }
   </style>
-  <script type="module" crossorigin src="./assets/index-DNfvUL5_.js"></script>
+  <script type="module" crossorigin src="./assets/index-B6-b9sMJ.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/coreProgression-CdjaJHgI.js">
   <link rel="modulepreload" crossorigin href="./assets/weapons-TlNlbSL3.js">
-  <link rel="modulepreload" crossorigin href="./assets/accountClient-BtvE2-bd.js">
-  <link rel="modulepreload" crossorigin href="./assets/a11y-BzYmzXK2.js">
-  <link rel="modulepreload" crossorigin href="./assets/whompOfferTheme-vcaMxanP.js">
+  <link rel="modulepreload" crossorigin href="./assets/accountClient-L4IUtMS3.js">
   <link rel="modulepreload" crossorigin href="./assets/world-C3rCcAMp.js">
   <link rel="modulepreload" crossorigin href="./assets/shipSystems-CuzgvloQ.js">
   <link rel="modulepreload" crossorigin href="./assets/campfireLines-OofxVPoU.js">
-  <link rel="modulepreload" crossorigin href="./assets/three-B3qr9KnT.js">
 </head>
 <body>
+  <div id="whomp-boot" aria-hidden="true"><i></i></div>
   <div id="app"></div>
 </body>
 </html>

@@ -11,10 +11,10 @@ globalThis.__WHOMP_HUBMAP__ = {
     "bearings": "village bearings are theta = atan2(lx, lz) degrees: 0 is due east (the gate), 90 due north"
   },
   "bounds": {
-    "minX": -116,
-    "maxX": 116,
-    "minZ": -116,
-    "maxZ": 116
+    "minX": -156,
+    "maxX": 156,
+    "minZ": -156,
+    "maxZ": 156
   },
   "layers": [
     "districts",
