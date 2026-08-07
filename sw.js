@@ -1,7 +1,7 @@
 /* WHOMP service worker — app-shell precache + runtime caching.
  *
  * CHANNEL and VERSION are stamped by vite.config.ts on the
- * stable/0.6.7-c6ef999e placeholders in dist/sw.js. The stamp makes a
+ * stable/0.7.0-76519a20 placeholders in dist/sw.js. The stamp makes a
  * new deploy's sw.js byte-different, which is what makes the browser install
  * a NEW worker; that worker deliberately parks in `waiting` (NO skipWaiting
  * on install) until the page's 'UPDATE READY — RESTART' toast posts
@@ -22,7 +22,7 @@
  */
 
 const CHANNEL = 'stable';
-const VERSION = '0.6.7-c6ef999e';
+const VERSION = '0.7.0-76519a20';
 const CACHE_PREFIX = `whomp-${CHANNEL}-`;
 const CACHE = `${CACHE_PREFIX}${VERSION}`;
 const SHELL = ['./', './index.html', './manifest.webmanifest'];
